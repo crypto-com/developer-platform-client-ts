@@ -2,6 +2,7 @@ import { TokenBalance } from '../lib/client/interfaces/explorer.interfaces.js';
 import { Balance } from '../lib/client/interfaces/token.interfaces.js';
 import { MagicLinkData } from '../lib/client/interfaces/transaction.interfaces.js';
 import { ApiResponse, Method } from './api.interfaces.js';
+import { BASE_URL } from './const.js';
 
 /**
  * Fetches the native token balance of a specific address on a blockchain.
@@ -23,7 +24,7 @@ export const getNativeTokenBalance = async (
   address: string,
   apiKey: string
 ): Promise<ApiResponse<Balance>> => {
-  const url = `https://developer-platform-api.crypto.com/api/v1/cdc-developer-platform/token/${chainId}/native-token-balance?address=${address}&apiKey=${apiKey}`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/token/${chainId}/native-token-balance?address=${address}&apiKey=${apiKey}`;
 
   try {
     const response = await fetch(url, {
@@ -71,7 +72,7 @@ export const getERC20TokenBalance = async (
   blockHeight: string = 'latest',
   apiKey: string
 ): Promise<ApiResponse<TokenBalance>> => {
-  const url = `https://developer-platform-api.crypto.com/v1/cdc-developer-platform/token/${chainId}/erc20-token-balance?address=${address}&contractAddress=${contractAddress}&blockHeight=${blockHeight}&apiKey=${apiKey}`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/token/${chainId}/erc20-token-balance?address=${address}&contractAddress=${contractAddress}&blockHeight=${blockHeight}&apiKey=${apiKey}`;
 
   try {
     const response = await fetch(url, {
@@ -119,7 +120,7 @@ export const transferToken = async (
   },
   provider: string
 ): Promise<ApiResponse<MagicLinkData>> => {
-  const url = `https://developer-platform-api.crypto.com/v1/cdc-developer-platform/token/${chainId}/transfer`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/token/${chainId}/transfer`;
 
   try {
     const response = await fetch(url, {
@@ -166,7 +167,7 @@ export const wrapToken = async (
   },
   provider: string
 ): Promise<ApiResponse<MagicLinkData>> => {
-  const url = `https://developer-platform-api.crypto.com/v1/cdc-developer-platform/token/${chainId}/wrap`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/token/${chainId}/wrap`;
 
   try {
     const response = await fetch(url, {
@@ -215,7 +216,7 @@ export const swapToken = async (
   },
   provider: string
 ): Promise<ApiResponse<MagicLinkData>> => {
-  const url = `https://developer-platform-api.crypto.com/v1/cdc-developer-platform/token/${chainId}/swap`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/token/${chainId}/swap`;
 
   try {
     const response = await fetch(url, {

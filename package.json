@@ -16,7 +16,8 @@
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "prepare": "npm run build",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "author": "rarcifa@gmail.com",
   "license": "MIT",

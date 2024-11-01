@@ -1,5 +1,6 @@
 import { GetContractAbiData } from '../lib/client/interfaces/contract.interfaces.js';
 import { ApiResponse, Method } from './api.interfaces.js';
+import { BASE_URL } from './const.js';
 
 /**
  * Fetches the ABI (Application Binary Interface) of a specific contract by its address on a particular blockchain network.
@@ -21,7 +22,7 @@ export const getContractABI = async (
   contractAddress: string,
   apiKey: string
 ): Promise<ApiResponse<GetContractAbiData>> => {
-  const url = `https://developer-platform-api.crypto.com/api/v1/cdc-developer-platform/contract/${chainId}/contract-abi?contractAddress=${contractAddress}&apiKey=${apiKey}`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/contract/${chainId}/contract-abi?contractAddress=${contractAddress}&apiKey=${apiKey}`;
 
   try {
     const response = await fetch(url, {
