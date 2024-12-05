@@ -1,6 +1,7 @@
 import { Block } from './lib/client/Block.js';
 import { Client } from './lib/client/Client.js';
 import { Contract } from './lib/client/Contract.js';
+import { Exchange } from './lib/client/Exchange.js';
 import { Token } from './lib/client/Token.js';
 import { Transaction } from './lib/client/Transaction.js';
 import { Wallet } from './lib/client/Wallet.js';
@@ -55,6 +56,12 @@ import { CronosEvm, CronosZkEvm } from './lib/client/interfaces/chain.interfaces
  * @enum {string}
  * @module CronosZkEvm
  */
+  
+/**
+ * Exchange class for fetching exchange information.
+ *
+ * @module Exchange
+ */
 
-export { Client, Wallet, Transaction, Token, Contract, Block };
+export { Client, Wallet, Transaction, Token, Contract, Block, Exchange };
 export { CronosZkEvm, CronosEvm };
