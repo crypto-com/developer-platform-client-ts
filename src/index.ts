@@ -1,11 +1,13 @@
 import { Block } from './lib/client/Block.js';
 import { Client } from './lib/client/Client.js';
 import { Contract } from './lib/client/Contract.js';
+import { Defi } from './lib/client/Defi.js';
 import { Exchange } from './lib/client/Exchange.js';
 import { Token } from './lib/client/Token.js';
 import { Transaction } from './lib/client/Transaction.js';
 import { Wallet } from './lib/client/Wallet.js';
 import { CronosEvm, CronosZkEvm } from './lib/client/interfaces/chain.interfaces.js';
+import { DefiProtocol } from './lib/client/interfaces/defi.interfaces.js';
 
 /**
  * Client class for configuring and managing SDK functionality.
@@ -56,12 +58,17 @@ import { CronosEvm, CronosZkEvm } from './lib/client/interfaces/chain.interfaces
  * @enum {string}
  * @module CronosZkEvm
  */
-  
+
 /**
  * Exchange class for fetching exchange information.
  *
  * @module Exchange
  */
 
-export { Client, Wallet, Transaction, Token, Contract, Block, Exchange };
-export { CronosZkEvm, CronosEvm };
+/**
+ * Defi class for fetching DeFi information.
+ *
+ * @module Defi
+ */
+
+export { Block, Client, Contract, CronosEvm, CronosZkEvm, Defi, DefiProtocol, Exchange, Token, Transaction, Wallet };
