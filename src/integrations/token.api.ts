@@ -1,8 +1,8 @@
 import { TokenBalance } from '../lib/client/interfaces/explorer.interfaces.js';
 import { Balance } from '../lib/client/interfaces/token.interfaces.js';
 import { MagicLinkData } from '../lib/client/interfaces/transaction.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches the native token balance of a specific address on a blockchain.

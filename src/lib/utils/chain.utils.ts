@@ -1,0 +1,6 @@
+export enum ChainName {
+  CRONOS_EVM = '25',
+  CRONOS_EVM_TESTNET = '338',
+  CRONOS_ZKEVM = '388',
+  CRONOS_ZKEVM_TESTNET = '240',
+}

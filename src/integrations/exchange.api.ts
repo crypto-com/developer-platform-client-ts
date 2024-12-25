@@ -1,6 +1,6 @@
 import { TickerData } from '../lib/client/interfaces/exchange.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches all tickers from the exchange.

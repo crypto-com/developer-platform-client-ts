@@ -3,8 +3,8 @@ import {
   GetTransactionsByAddressData,
   GetTransactionStatusData,
 } from '../lib/client/interfaces/transaction.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches transactions for a specific wallet address.

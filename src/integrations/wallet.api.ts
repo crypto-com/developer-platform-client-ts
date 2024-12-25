@@ -1,7 +1,7 @@
 import { Balance } from '../lib/client/interfaces/token.interfaces.js';
 import { CreateWalletData } from '../lib/client/interfaces/wallet.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Creates a new wallet using the API.

@@ -1,6 +1,6 @@
 import { GetContractAbiData } from '../lib/client/interfaces/contract.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches the ABI (Application Binary Interface) of a specific contract by its address on a particular blockchain network.
