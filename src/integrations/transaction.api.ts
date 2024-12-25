@@ -11,7 +11,7 @@ import { ApiResponse, Method } from './api.interfaces.js';
  *
  * @async
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to fetch transactions for (CronosIds are supported)
+ * @param {string} address - The wallet address to fetch transactions for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} [session] - Optional. The pagination session token.
  * @param {string} [limit='20'] - Optional. The number of transactions to fetch.
  * @param {string} apiKey - The API key for authentication.

@@ -45,7 +45,7 @@ export const createWallet = async (): Promise<ApiResponse<CreateWalletData>> => 
  *
  * @async
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to check the balance for (CronosIds are supported)
+ * @param {string} address - The wallet address to check the balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} apiKey - The API key for authentication.
  * @returns {Promise<ApiResponse<Balance>>} - The native token balance of the wallet.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.

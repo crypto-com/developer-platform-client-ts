@@ -10,7 +10,7 @@ import { ApiResponse, Method } from './api.interfaces.js';
  * @async
  * @function getNativeTokenBalance
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to fetch the native token balance for (CronosIds are supported)
+ * @param {string} address - The wallet address to fetch the native token balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} apiKey - The API key used for authentication with the server.
  * @returns {Promise<ApiResponse<Balance>>} - A promise that resolves to the balance of the native token.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
@@ -54,7 +54,7 @@ export const getNativeTokenBalance = async (
  * @async
  * @function getERC20TokenBalance
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to fetch the ERC20 token balance for (CronosIds are supported)
+ * @param {string} address - The wallet address to fetch the ERC20 token balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} contractAddress - The contract address of the ERC20 token.
  * @param {string} [blockHeight='latest'] - Optional. The block height to query (default is 'latest').
  * @param {string} apiKey - The API key used for authentication with the server.
@@ -102,7 +102,7 @@ export const getERC20TokenBalance = async (
  * @async
  * @function transferToken
  * @param {string} chainId - The ID of the blockchain network.
- * @param {object} payload - The transaction payload including 'to' address (CronosIds are supported), 'amount', and optional 'contractAddress'.
+ * @param {object} payload - The transaction payload including 'to' address (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`), 'amount', and optional 'contractAddress'.
  * @param {string} [provider] - Optional. The provider URL for the blockchain network.
  * @returns {Promise<ApiResponse<MagicLinkData>>} - A promise that resolves to the result of the transaction.
  * @throws {Error} Will throw an error if the transaction fails or the server responds with an error message.
