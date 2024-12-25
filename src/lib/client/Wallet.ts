@@ -29,7 +29,7 @@ export class Wallet {
    * Retrieves the balance of the wallet for a specific address.
    *
    * @async
-   * @param {string} address - The wallet address to fetch the balance for.
+   * @param {string} address - The wallet address to fetch the balance for (CronosIds are supported)
    * @returns {Promise<ApiResponse<Balance>>} - A promise that resolves to the balance of the wallet.
    * @throws {Error} - Throws an error if the request fails.
    *

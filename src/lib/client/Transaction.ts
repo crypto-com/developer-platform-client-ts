@@ -22,7 +22,7 @@ export class Transaction {
    * Fetches transactions for a specific wallet address.
    *
    * @async
-   * @param {string} address - The wallet address to fetch transactions for.
+   * @param {string} address - The wallet address to fetch transactions for (CronosIds are supported)
    * @param {string} [session] - Optional. Session token for pagination (default is an empty string).
    * @param {string} [limit] - Optional. Limit for the number of transactions to fetch (default is 20).
    * @returns {Promise<ApiResponse<GetTransactionsByAddressData>>} - A promise that resolves to the transaction data for the specified address.

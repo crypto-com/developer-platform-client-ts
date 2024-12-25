@@ -22,7 +22,7 @@ export class Token {
    * Fetches the native token balance of a specific wallet address.
    *
    * @async
-   * @param {string} address - The wallet address to check the native token balance for.
+   * @param {string} address - The wallet address to check the native token balance for (CronosIds are supported)
    * @returns {Promise<ApiResponse<Balance>>} - A promise that resolves to the balance of the native token.
    * @throws {Error} - Throws an error if the request fails.
    *
@@ -40,7 +40,7 @@ export class Token {
    * Fetches the ERC20 token balance of a specific wallet address for a given ERC20 contract.
    *
    * @async
-   * @param {string} address - The wallet address to check the ERC20 token balance for.
+   * @param {string} address - The wallet address to check the ERC20 token balance for (CronosIds are supported)
    * @param {string} contractAddress - The contract address of the ERC20 token.
    * @param {string} [blockHeight='latest'] - Optional. The block height to query, default is 'latest'.
    * @returns {Promise<ApiResponse<TokenBalance>>} - A promise that resolves to the balance of the ERC20 token.
@@ -65,7 +65,7 @@ export class Token {
    *
    * @async
    * @param {object} payload - The transaction payload containing `to`, `amount`, and optionally `contractAddress`.
-   * @param {string} payload.to - The recipient address of the transfer.
+   * @param {string} payload.to - The recipient address of the transfer (CronosIds are supported)
    * @param {number} payload.amount - The amount of tokens to transfer.
    * @param {string} [payload.contractAddress] - Optional. The contract address of the ERC20 token (if transferring ERC20 tokens).
    * @returns {Promise<ApiResponse<MagicLinkData>>} - A promise that resolves to the result of the transaction.
