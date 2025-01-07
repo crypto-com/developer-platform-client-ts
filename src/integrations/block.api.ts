@@ -1,6 +1,6 @@
 import { GetBlockByTag } from '../lib/client/interfaces/block.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 /**
  * Fetches a block by tag or block number.
  *

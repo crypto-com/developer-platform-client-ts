@@ -1,7 +1,7 @@
 import { Balance } from '../lib/client/interfaces/token.interfaces.js';
 import { CreateWalletData } from '../lib/client/interfaces/wallet.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Creates a new wallet using the API.
@@ -45,7 +45,7 @@ export const createWallet = async (): Promise<ApiResponse<CreateWalletData>> => 
  *
  * @async
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to check the balance for (e.g., 0x...).
+ * @param {string} address - The wallet address to check the balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} apiKey - The API key for authentication.
  * @returns {Promise<ApiResponse<Balance>>} - The native token balance of the wallet.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.

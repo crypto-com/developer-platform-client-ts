@@ -1,6 +1,6 @@
 import { DefiProtocol, Farm, WhitelistedToken } from '../lib/client/interfaces/defi.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches whitelisted tokens for a specific DeFi protocol.

@@ -3,15 +3,15 @@ import {
   GetTransactionsByAddressData,
   GetTransactionStatusData,
 } from '../lib/client/interfaces/transaction.interfaces.js';
+import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-import { BASE_URL } from './const.js';
 
 /**
  * Fetches transactions for a specific wallet address.
  *
  * @async
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to fetch transactions for (e.g., 0x...).
+ * @param {string} address - The wallet address to fetch transactions for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @param {string} [session] - Optional. The pagination session token.
  * @param {string} [limit='20'] - Optional. The number of transactions to fetch.
  * @param {string} apiKey - The API key for authentication.
