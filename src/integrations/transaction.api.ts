@@ -12,6 +12,8 @@ import { ApiResponse, Method } from './api.interfaces.js';
  * @async
  * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
  * @param {string} address - The wallet address to fetch transactions for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
+ * @param {number} startBlock - The starting block number to fetch transactions from. (The maximum number of blocks that can be fetched is 10,000)
+ * @param {number} endBlock - The ending block number to fetch transactions to. (The maximum number of blocks that can be fetched is 10,000)
  * @param {string} [session] - Optional. The pagination session token.
  * @param {string} [limit='20'] - Optional. The number of transactions to fetch.
  * @param {string} apiKey - The API key for authentication.
@@ -19,17 +21,19 @@ import { ApiResponse, Method } from './api.interfaces.js';
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
  *
  * @example
- * const transactions = await getTransactionsByAddress('1', '0x...', '', '10', 'your-api-key');
+ * const transactions = await getTransactionsByAddress('1', '0x...', 10000, 20000, '', '10', 'your-api-key');
  * console.log(transactions);
  */
 export const getTransactionsByAddress = async (
   chainId: string,
   address: string,
+  startBlock: number,
+  endBlock: number,
   session: string = '',
   limit: string = '20',
   apiKey: string
 ): Promise<ApiResponse<GetTransactionsByAddressData>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/${chainId}/address?address=${address}&session=${session}&limit=${limit}&apiKey=${apiKey}`;
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/${chainId}/address?address=${address}&startBlock=${startBlock}&endBlock=${endBlock}&session=${session}&limit=${limit}&apiKey=${apiKey}`;
 
   try {
     const response = await fetch(url, {
