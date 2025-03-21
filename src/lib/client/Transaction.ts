@@ -23,23 +23,27 @@ export class Transaction {
    *
    * @async
    * @param {string} address - The wallet address to fetch transactions for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
+   * @param {number} startBlock - The starting block number to fetch transactions from. (The maximum number of blocks that can be fetched is 10,000)
+   * @param {number} endBlock - The ending block number to fetch transactions to. (The maximum number of blocks that can be fetched is 10,000)
    * @param {string} [session] - Optional. Session token for pagination (default is an empty string).
    * @param {string} [limit] - Optional. Limit for the number of transactions to fetch (default is 20).
    * @returns {Promise<ApiResponse<GetTransactionsByAddressData>>} - A promise that resolves to the transaction data for the specified address.
    * @throws {Error} - Throws an error if the request fails.
    *
    * @example
-   * const transactions = await Transaction.getTransactionsByAddress('0x...');
+   * const transactions = await Transaction.getTransactionsByAddress('0x...', 10000, 20000);
    * console.log(transactions);
    */
   public static async getTransactionsByAddress(
     address: string,
+    startBlock: number,
+    endBlock: number,
     session?: string,
     limit?: string
   ): Promise<ApiResponse<GetTransactionsByAddressData>> {
     const chainId = Client.getChainId();
     const apiKey = Client.getApiKey();
-    return await getTransactionsByAddress(chainId, address, session, limit, apiKey);
+    return await getTransactionsByAddress(chainId, address, startBlock, endBlock, session, limit, apiKey);
   }
 
   /**
