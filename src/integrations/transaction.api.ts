@@ -1,7 +1,12 @@
 import {
-  GetTransactionByHashData,
-  GetTransactionsByAddressData,
-  GetTransactionStatusData,
+  TransactionByHash,
+  TransactionsByAddress,
+  TransactionStatus,
+  TransactionCount,
+  GasPrice,
+  FeeData,
+  EstimateGasPayload,
+  GasLimit,
 } from '../lib/client/interfaces/transaction.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
@@ -10,50 +15,60 @@ import { ApiResponse, Method } from './api.interfaces.js';
  * Fetches transactions for a specific wallet address.
  *
  * @async
- * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to fetch transactions for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
- * @param {number} startBlock - The starting block number to fetch transactions from. (The maximum number of blocks that can be fetched is 10,000)
- * @param {number} endBlock - The ending block number to fetch transactions to. (The maximum number of blocks that can be fetched is 10,000)
- * @param {string} [session] - Optional. The pagination session token.
- * @param {string} [limit='20'] - Optional. The number of transactions to fetch.
- * @param {string} apiKey - The API key for authentication.
- * @returns {Promise<ApiResponse<GetTransactionsByAddressData>>} - The transactions data.
- * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {string} address - Wallet address (CronosIds supported, e.g. `xyz.cro`).
+ * @param {string} explorerKey - Blockchain explorer API key.
+ * @param {string} session - Pagination session.
+ * @param {string} limit - Number of transactions to fetch.
+ * @param {number} [startBlock] - Start block number.
+ * @param {number} [endBlock] - End block number.
+ * @returns {Promise<ApiResponse<TransactionsByAddress>>} - A promise that resolves to transactions.
+ * @throws {Error} Will throw if request fails.
  *
  * @example
- * const transactions = await getTransactionsByAddress('1', '0x...', 10000, 20000, '', '10', 'your-api-key');
- * console.log(transactions);
+ * const res = await getTransactionsByAddress(apiKey, '0x...', 'explorerKey');
+ * console.log(res);
  */
 export const getTransactionsByAddress = async (
-  chainId: string,
+  apiKey: string,
   address: string,
-  startBlock: number,
-  endBlock: number,
-  session: string = '',
-  limit: string = '20',
-  apiKey: string
-): Promise<ApiResponse<GetTransactionsByAddressData>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/${chainId}/address?address=${address}&startBlock=${startBlock}&endBlock=${endBlock}&session=${session}&limit=${limit}&apiKey=${apiKey}`;
+  explorerKey: string,
+  session: string,
+  limit: string,
+  startBlock?: number,
+  endBlock?: number
+): Promise<ApiResponse<TransactionsByAddress>> => {
+  const params = new URLSearchParams({
+    address,
+    explorerKey,
+    session,
+    limit,
+  });
+
+  if (startBlock !== undefined) params.append('startBlock', startBlock.toString());
+  if (endBlock !== undefined) params.append('endBlock', endBlock.toString());
+
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/address?${params.toString()}`;
 
   try {
     const response = await fetch(url, {
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
     if (!response.ok) {
       const errorBody = await response.json();
-      const serverErrorMessage = errorBody.error || `HTTP error! status: ${response.status}`;
-      throw new Error(serverErrorMessage);
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
   } catch (e) {
     const error = e as Error;
     console.error(`[transactionApi/getTransactionsByAddress] - ${error.message}`);
-    throw new Error(`Failed to fetch transactions by address: ${error.message}`);
+    throw new Error(`Failed to fetch transactions: ${error.message}`);
   }
 };
 
@@ -61,78 +76,68 @@ export const getTransactionsByAddress = async (
  * Fetches a transaction by its hash.
  *
  * @async
- * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} txHash - The transaction hash (e.g., 0x...).
- * @param {string} apiKey - The API key for authentication.
- * @returns {Promise<ApiResponse<GetTransactionByHashData>>} - The transaction data.
- * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {string} txHash - Transaction hash.
+ * @returns {Promise<ApiResponse<TransactionByHash>>} - A promise that resolves to transactions.
+ * @throws {Error} Will throw if request fails.
  *
  * @example
- * const transactionData = await getTransactionByHash('1', '0x...', 'your-api-key');
- * console.log(transactionData);
+ * const res = await getTransactionByHash(apiKey, '0x...');
+ * console.log(res);
  */
-export const getTransactionByHash = async (
-  chainId: string,
-  txHash: string,
-  apiKey: string
-): Promise<ApiResponse<GetTransactionByHashData>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/${chainId}/tx-hash?txHash=${txHash}&apiKey=${apiKey}`;
+export const getTransactionByHash = async (apiKey: string, txHash: string): Promise<ApiResponse<TransactionByHash>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/tx-hash?txHash=${txHash}`;
 
   try {
     const response = await fetch(url, {
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
     if (!response.ok) {
       const errorBody = await response.json();
-      const serverErrorMessage = errorBody.error || `HTTP error! status: ${response.status}`;
-      throw new Error(serverErrorMessage);
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
   } catch (e) {
     const error = e as Error;
     console.error(`[transactionApi/getTransactionByHash] - ${error.message}`);
-    throw new Error(`Failed to fetch transaction by hash: ${error.message}`);
+    throw new Error(`Failed to fetch transaction: ${error.message}`);
   }
 };
 
 /**
- * Fetches the status of a transaction by its hash.
+ * Fetches the transaction status by hash.
  *
  * @async
- * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} txHash - The transaction hash (e.g., 0x...).
- * @param {string} apiKey - The API key for authentication.
- * @returns {Promise<ApiResponse<GetTransactionStatusData>>} - The transaction status.
- * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {string} txHash - Transaction hash.
+ * @returns {Promise<ApiResponse<TransactionStatus>>} - A promise that resolves to the transaction status.
+ * @throws {Error} Will throw if request fails.
  *
  * @example
- * const transactionStatus = await getTransactionStatus('1', '0x...', 'your-api-key');
- * console.log(transactionStatus);
+ * const res = await getTransactionStatus(apiKey, '0x...');
+ * console.log(res);
  */
-export const getTransactionStatus = async (
-  chainId: string,
-  txHash: string,
-  apiKey: string
-): Promise<ApiResponse<GetTransactionStatusData>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/${chainId}/status?txHash=${txHash}&apiKey=${apiKey}`;
+export const getTransactionStatus = async (apiKey: string, txHash: string): Promise<ApiResponse<TransactionStatus>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/status?txHash=${txHash}`;
 
   try {
     const response = await fetch(url, {
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
     if (!response.ok) {
       const errorBody = await response.json();
-      const serverErrorMessage = errorBody.error || `HTTP error! status: ${response.status}`;
-      throw new Error(serverErrorMessage);
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
@@ -140,5 +145,159 @@ export const getTransactionStatus = async (
     const error = e as Error;
     console.error(`[transactionApi/getTransactionStatus] - ${error.message}`);
     throw new Error(`Failed to fetch transaction status: ${error.message}`);
+  }
+};
+
+/**
+ * Fetches transaction count for a wallet address.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {string} walletAddress - Wallet address.
+ * @returns {Promise<ApiResponse<TransactionCount>>} - A promise that resolves to the transaction count.
+ * @throws {Error} Will throw if request fails.
+ *
+ * @example
+ * const res = await getTransactionCount(apiKey, '0x...');
+ * console.log(res);
+ */
+export const getTransactionCount = async (
+  apiKey: string,
+  walletAddress: string
+): Promise<ApiResponse<TransactionCount>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/tx-count?walletAddress=${walletAddress}`;
+
+  try {
+    const response = await fetch(url, {
+      method: Method.GET,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (e) {
+    const error = e as Error;
+    console.error(`[transactionApi/getTransactionCount] - ${error.message}`);
+    throw new Error(`Failed to fetch transaction count: ${error.message}`);
+  }
+};
+
+/**
+ * Fetches current gas price.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @returns {Promise<ApiResponse<GasPriceData>>} - A promise that resolves to the gas price of a potential transaction.
+ * @throws {Error} Will throw if request fails.
+ *
+ * @example
+ * const res = await getGasPrice(apiKey);
+ * console.log(res);
+ */
+export const getGasPrice = async (apiKey: string): Promise<ApiResponse<GasPrice>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/gas-price`;
+
+  try {
+    const response = await fetch(url, {
+      method: Method.GET,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (e) {
+    const error = e as Error;
+    console.error(`[transactionApi/getGasPrice] - ${error.message}`);
+    throw new Error(`Failed to fetch gas price: ${error.message}`);
+  }
+};
+
+/**
+ * Fetches current fee data.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @returns {Promise<ApiResponse<FeeData>>} - A promise that resolves to the fee data.
+ * @throws {Error} Will throw if request fails.
+ *
+ * @example
+ * const res = await getFeeData(apiKey);
+ * console.log(res);
+ */
+export const getFeeData = async (apiKey: string): Promise<ApiResponse<FeeData>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/fee-data`;
+
+  try {
+    const response = await fetch(url, {
+      method: Method.GET,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (e) {
+    const error = e as Error;
+    console.error(`[transactionApi/getFeeData] - ${error.message}`);
+    throw new Error(`Failed to fetch fee data: ${error.message}`);
+  }
+};
+
+/**
+ * Estimates gas for a transaction.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {EstimateGasPayload} payload - Transaction payload (from, to, value, gasLimit, gasPrice, data).
+ * @returns {Promise<ApiResponse<EstimateGasData>>} - A promise that resolves to the gas estimation.
+ * @throws {Error} Will throw if request fails.
+ *
+ * @example
+ * const res = await estimateGas(apiKey, { from: '0x...', to: '0x...', value: '1000000000000000000' });
+ * console.log(res);
+ */
+export const estimateGas = async (apiKey: string, payload: EstimateGasPayload): Promise<ApiResponse<GasLimit>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/estimate-gas`;
+
+  try {
+    const response = await fetch(url, {
+      method: Method.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (e) {
+    const error = e as Error;
+    console.error(`[transactionApi/estimateGas] - ${error.message}`);
+    throw new Error(`Failed to estimate gas: ${error.message}`);
   }
 };

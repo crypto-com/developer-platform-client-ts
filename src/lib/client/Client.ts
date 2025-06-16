@@ -1,22 +1,17 @@
-import { CronosEvm, CronosZkEvm } from './interfaces/chain.interfaces.js';
-
 /**
  * Configuration parameters for setting up the Client.
  *
  * @interface
  * @property {string} apiKey - The API key used to authenticate requests to the blockchain platform.
- * @property {CronosEvm | CronosZkEvm} chain - The blockchain chain to use, specified using enums `CronosEvm` or `CronosZkEvm`.
  * @property {string} [provider] - Optional. The provider URL for creating magic links or for signature requests.
  *
  * @example
  * const config: Config = {
  *   apiKey: 'your-api-key',
- *   chain: CronosZkEvm.Testnet,
  *   provider: 'https://provider-url.com' // Optional
  * };
  */
 interface Config {
-  chain: CronosEvm | CronosZkEvm;
   apiKey: string;
   provider?: string;
 }
@@ -25,19 +20,10 @@ interface Config {
  * Client class used to configure and manage blockchain SDK settings.
  *
  * @class
- * @property {string} chainId - The ID of the blockchain chain being used (determined from the chain enum).
  * @property {string} apiKey - The API key for authenticating requests.
  * @property {string | undefined} provider - Optional provider URL used for signing or generating magic links.
  */
 export class Client {
-  /**
-   * @private
-   * @type {string}
-   * @description The chain ID selected from the enum (`CronosEvm` or `CronosZkEvm`) based on the configured chain.
-   * It is set when `Client.configure()` is called, derived from the selected chain.
-   */
-  private static chainId: string;
-
   /**
    * @private
    * @type {string}
@@ -72,7 +58,6 @@ export class Client {
    * });
    */
   public static init(config: Config): void {
-    this.chainId = config.chain;
     this.apiKey = config.apiKey;
     this.provider = config.provider;
   }
@@ -89,7 +74,7 @@ export class Client {
    */
   public static getApiKey(): string {
     if (!this.apiKey) {
-      throw new Error("API key not configured. Call Client.configure({ apiKey: 'your-api-key' }) first.");
+      throw new Error("API key not configured. Call Client.init({ apiKey: 'your-api-key' }) first.");
     }
     return this.apiKey;
   }
@@ -106,22 +91,5 @@ export class Client {
    */
   public static getProvider(): string | undefined {
     return this.provider;
-  }
-
-  /**
-   * Retrieves the chain ID based on the selected chain enum.
-   *
-   * @returns {string} The chain ID corresponding to the configured chain.
-   * @throws {Error} Throws an error if the chain ID is not configured.
-   * @memberof Client
-   *
-   * @example
-   * const chainId = Client.getChainId();
-   */
-  public static getChainId(): string {
-    if (!this.chainId) {
-      throw new Error('Chain ID not configured. Call Client.configure({ chain: CronosZkEvm.Testnet }) first.');
-    }
-    return this.chainId;
   }
 }

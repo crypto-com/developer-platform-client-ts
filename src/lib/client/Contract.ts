@@ -1,32 +1,47 @@
 import { ApiResponse } from '../../integrations/api.interfaces.js';
-import { getContractABI } from '../../integrations/contract.api.js';
+import { getContractABI, getContractCode } from '../../integrations/contract.api.js';
 import { Client } from './Client.js';
-import { GetContractAbiData } from './interfaces/contract.interfaces.js';
+import { GetContractAbi, GetContractCode } from './interfaces/contract.interfaces.js';
 
 /**
- * Contract class handles interactions related to smart contracts, such as fetching the contract's ABI (Application Binary Interface).
+ * Contract class handles interactions related to smart contracts, such as fetching contract ABI and bytecode.
  *
  * @class
  */
 export class Contract {
   /**
-   * Fetches the ABI (Application Binary Interface) of a contract by its address.
-   *
-   * The ABI is required for interacting with the smart contract, and it contains
-   * information about the contract's functions, events, and other properties.
+   * Fetches the ABI (Application Binary Interface) of a smart contract.
    *
    * @async
-   * @param {string} contractAddress - The smart contract address on the blockchain.
-   * @returns {Promise<ApiResponse<GetContractAbiData>>} - A promise that resolves to the ABI of the contract, or an error if the ABI cannot be fetched.
-   * @throws {Error} - If the network or contract address is invalid or if the ABI could not be retrieved.
+   * @param {string} contractAddress - The smart contract address.
+   * @param {string} explorerKey - The API key for the blockchain explorer.
+   * @returns {Promise<ApiResponse<GetContractAbi>>} - A promise that resolves to the ABI of the contract.
+   * @throws {Error} If the ABI retrieval fails.
    *
    * @example
-   * const abi = await contract.getContractABI('1', '0x..');
+   * const abi = await Contract.getContractABI('0x...', 'explorerKey');
    * console.log(abi);
    */
-  public static async getContractABI(contractAddress: string): Promise<ApiResponse<GetContractAbiData>> {
-    const chainId = Client.getChainId();
-    const apiKey = Client.getApiKey();
-    return await getContractABI(chainId, contractAddress, apiKey);
+  public static async getContractABI(
+    contractAddress: string,
+    explorerKey: string
+  ): Promise<ApiResponse<GetContractAbi>> {
+    return await getContractABI(Client.getApiKey(), contractAddress, explorerKey);
+  }
+
+  /**
+   * Fetches the bytecode of a smart contract.
+   *
+   * @async
+   * @param {string} contractAddress - The smart contract address.
+   * @returns {Promise<ApiResponse<GetContractCode>>} - A promise that resolves to the bytecode of the contract.
+   * @throws {Error} If the bytecode retrieval fails.
+   *
+   * @example
+   * const bytecode = await Contract.getContractCode('0x...');
+   * console.log(bytecode);
+   */
+  public static async getContractCode(contractAddress: string): Promise<ApiResponse<GetContractCode>> {
+    return await getContractCode(Client.getApiKey(), contractAddress);
   }
 }

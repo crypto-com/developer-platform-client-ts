@@ -4,8 +4,21 @@ import { ApiResponse, Method } from './api.interfaces.js';
 
 /**
  * Fetches whitelisted tokens for a specific DeFi protocol.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {DefiProtocol} protocol - The DeFi protocol for which to fetch whitelisted tokens.
+ * @returns {Promise<ApiResponse<WhitelistedToken[]>>} - A promise that resolves to an array of whitelisted tokens wrapped in an ApiResponse.
+ * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ *
+ * @example
+ * const tokens = await getWhitelistedTokens(apiKey, 'Uniswap');
+ * console.log(tokens.data);
  */
-export const getWhitelistedTokens = async (protocol: DefiProtocol): Promise<ApiResponse<WhitelistedToken[]>> => {
+export const getWhitelistedTokens = async (
+  apiKey: string,
+  protocol: DefiProtocol
+): Promise<ApiResponse<WhitelistedToken[]>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/defi/whitelisted-tokens/${protocol}`;
 
   try {
@@ -13,6 +26,7 @@ export const getWhitelistedTokens = async (protocol: DefiProtocol): Promise<ApiR
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
@@ -31,8 +45,18 @@ export const getWhitelistedTokens = async (protocol: DefiProtocol): Promise<ApiR
 
 /**
  * Fetches all farms for a specific DeFi protocol.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {DefiProtocol} protocol - The DeFi protocol for which to fetch farms.
+ * @returns {Promise<ApiResponse<Farm[]>>} - A promise that resolves to an array of farms wrapped in an ApiResponse.
+ * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ *
+ * @example
+ * const farms = await getAllFarms(apiKey, 'Uniswap');
+ * console.log(farms.data);
  */
-export const getAllFarms = async (protocol: DefiProtocol): Promise<ApiResponse<Farm[]>> => {
+export const getAllFarms = async (apiKey: string, protocol: DefiProtocol): Promise<ApiResponse<Farm[]>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/defi/farms/${protocol}`;
 
   try {
@@ -40,6 +64,7 @@ export const getAllFarms = async (protocol: DefiProtocol): Promise<ApiResponse<F
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
@@ -57,9 +82,24 @@ export const getAllFarms = async (protocol: DefiProtocol): Promise<ApiResponse<F
 };
 
 /**
- * Fetches a specific farm by its symbol for a DeFi protocol.
+ * Fetches a specific farm by its symbol for a given DeFi protocol.
+ *
+ * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {DefiProtocol} protocol - The DeFi protocol in which the farm exists.
+ * @param {string} symbol - The symbol of the farm to fetch.
+ * @returns {Promise<ApiResponse<Farm>>} - A promise that resolves to the farm details wrapped in an ApiResponse.
+ * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
+ *
+ * @example
+ * const farm = await getFarmBySymbol(apiKey, 'Uniswap', 'UNI-ETH-LP');
+ * console.log(farm.data);
  */
-export const getFarmBySymbol = async (protocol: DefiProtocol, symbol: string): Promise<ApiResponse<Farm>> => {
+export const getFarmBySymbol = async (
+  apiKey: string,
+  protocol: DefiProtocol,
+  symbol: string
+): Promise<ApiResponse<Farm>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/defi/farms/${protocol}/${symbol}`;
 
   try {
@@ -67,6 +107,7 @@ export const getFarmBySymbol = async (protocol: DefiProtocol, symbol: string): P
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 

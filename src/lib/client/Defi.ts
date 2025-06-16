@@ -1,5 +1,6 @@
 import { ApiResponse } from '../../integrations/api.interfaces.js';
 import { getAllFarms, getFarmBySymbol, getWhitelistedTokens } from '../../integrations/defi.api.js';
+import { Client } from './Client.js';
 import { DefiProtocol, Farm, WhitelistedToken } from './interfaces/defi.interfaces.js';
 
 /**
@@ -21,7 +22,7 @@ export class Defi {
    * console.log(tokens);
    */
   public static async getWhitelistedTokens(protocol: DefiProtocol): Promise<ApiResponse<WhitelistedToken[]>> {
-    return await getWhitelistedTokens(protocol);
+    return await getWhitelistedTokens(Client.getApiKey(), protocol);
   }
 
   /**
@@ -37,7 +38,7 @@ export class Defi {
    * console.log(farms);
    */
   public static async getAllFarms(protocol: DefiProtocol): Promise<ApiResponse<Farm[]>> {
-    return await getAllFarms(protocol);
+    return await getAllFarms(Client.getApiKey(), protocol);
   }
 
   /**
@@ -54,6 +55,6 @@ export class Defi {
    * console.log(farm);
    */
   public static async getFarmBySymbol(protocol: DefiProtocol, symbol: string): Promise<ApiResponse<Farm>> {
-    return await getFarmBySymbol(protocol, symbol);
+    return await getFarmBySymbol(Client.getApiKey(), protocol, symbol);
   }
 }

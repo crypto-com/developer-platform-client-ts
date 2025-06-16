@@ -1,5 +1,5 @@
 import { Balance } from '../lib/client/interfaces/token.interfaces.js';
-import { CreateWalletData } from '../lib/client/interfaces/wallet.interfaces.js';
+import { WalletData } from '../lib/client/interfaces/wallet.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
 
@@ -8,14 +8,15 @@ import { ApiResponse, Method } from './api.interfaces.js';
  *
  * @async
  * @throws Will throw an error if the wallet creation fails or the server responds with an error.
- * @returns {Promise<ApiResponse<CreateWalletData>>} - The newly created wallet information.
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @returns {Promise<ApiResponse<WalletData>>} - The newly created wallet information.
  * @throws {Error} Will throw an error if the create wallet request fails or the server responds with an error message.
  *
  * @example
- * const newWallet = await createWallet();
+ * const newWallet = await createWallet('api_key');
  * console.log(newWallet);
  */
-export const createWallet = async (): Promise<ApiResponse<CreateWalletData>> => {
+export const createWallet = async (apiKey: string): Promise<ApiResponse<WalletData>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/wallet`;
 
   try {
@@ -23,6 +24,7 @@ export const createWallet = async (): Promise<ApiResponse<CreateWalletData>> => 
       method: Method.POST,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
@@ -44,25 +46,25 @@ export const createWallet = async (): Promise<ApiResponse<CreateWalletData>> => 
  * Fetches the native token balance of a wallet.
  *
  * @async
- * @param {string} chainId - The ID of the blockchain network (e.g., Ethereum, Cronos).
- * @param {string} address - The wallet address to check the balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
- * @param {string} apiKey - The API key for authentication.
+ * @param {string} apiKey - The API key used for authentication with the server.
+ * @param {string} walletAddress - The wallet address to check the balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
  * @returns {Promise<ApiResponse<Balance>>} - The native token balance of the wallet.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
  *
  * @example
- * const balance = await getBalance('1', '0x...');
+ * const balance = await getBalance('api_key', '0x...');
  * console.log(balance);
  */
 
-export const getBalance = async (chainId: string, address: string, apiKey: string): Promise<ApiResponse<Balance>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/wallet/${chainId}/balance?address=${address}&apiKey=${apiKey}`;
+export const getBalance = async (apiKey: string, walletAddress: string): Promise<ApiResponse<Balance>> => {
+  const url = `${BASE_URL}/api/v1/cdc-developer-platform/wallet/balance?walletAddress=${walletAddress}`;
 
   try {
     const response = await fetch(url, {
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 

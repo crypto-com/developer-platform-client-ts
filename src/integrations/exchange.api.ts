@@ -7,13 +7,14 @@ import { ApiResponse, Method } from './api.interfaces.js';
  *
  * @async
  * @returns {Promise<ApiResponse<TickerResponse>>} - All available tickers.
+ * @param {string} apiKey - The API key used for authentication with the server.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
  *
  * @example
  * const tickers = await getAllTickers();
  * console.log(tickers);
  */
-export const getAllTickers = async (): Promise<ApiResponse<TickerData[]>> => {
+export const getAllTickers = async (apiKey: string): Promise<ApiResponse<TickerData[]>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/exchange/tickers`;
 
   try {
@@ -21,6 +22,7 @@ export const getAllTickers = async (): Promise<ApiResponse<TickerData[]>> => {
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
@@ -42,6 +44,7 @@ export const getAllTickers = async (): Promise<ApiResponse<TickerData[]>> => {
  * Fetches ticker information for a specific instrument.
  *
  * @async
+ * @param {string} apiKey - The API key used for authentication with the server.
  * @param {string} instrumentName - The name of the trading instrument (e.g., 'BTC_USDT').
  * @returns {Promise<ApiResponse<Ticker>>} - The ticker information for the specified instrument.
  * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
@@ -50,7 +53,10 @@ export const getAllTickers = async (): Promise<ApiResponse<TickerData[]>> => {
  * const btcTicker = await getTickerByInstrument('BTC_USDT');
  * console.log(btcTicker);
  */
-export const getTickerByInstrument = async (instrumentName: string): Promise<ApiResponse<TickerData>> => {
+export const getTickerByInstrument = async (
+  apiKey: string,
+  instrumentName: string
+): Promise<ApiResponse<TickerData>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/exchange/tickers/${instrumentName}`;
 
   try {
@@ -58,6 +64,7 @@ export const getTickerByInstrument = async (instrumentName: string): Promise<Api
       method: Method.GET,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
       },
     });
 
