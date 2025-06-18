@@ -7,3 +7,9 @@ export enum Symbol {
   CRO = 'CRO',
   ETH = 'ETH',
 }
+
+export interface TokenMetadata {
+  name: string;
+  symbol: string;
+  decimals?: string;
+}

@@ -1,4 +1,4 @@
-export interface CreateWalletData {
+export interface WalletData {
   address: string;
   privateKey: string;
   mnemonic: string;

@@ -1,5 +1,6 @@
 import { ApiResponse } from '../../integrations/api.interfaces.js';
 import { getAllTickers, getTickerByInstrument } from '../../integrations/exchange.api.js';
+import { Client } from './Client.js';
 import { TickerData } from './interfaces/exchange.interfaces.js';
 
 /**
@@ -12,6 +13,7 @@ export class Exchange {
    * Retrieves all available tickers from the Crypto.com Exchange (Chain agnostic).
    *
    * @async
+   * @function getFarmBySymbol
    * @returns {Promise<ApiResponse<TickerResponse>>} - A promise that resolves to all available tickers.
    * @throws {Error} - Throws an error if the request fails.
    *
@@ -20,13 +22,14 @@ export class Exchange {
    * console.log(tickers);
    */
   public static async getAllTickers(): Promise<ApiResponse<TickerData[]>> {
-    return await getAllTickers();
+    return await getAllTickers(Client.getApiKey());
   }
 
   /**
    * Retrieves ticker information for a specific trading instrument from the Crypto.com Exchange (Chain agnostic).
    *
    * @async
+   *
    * @param {string} instrumentName - The name of the trading instrument (e.g., 'BTC_USDT')
    * @returns {Promise<ApiResponse<TickerData>>} - A promise that resolves to the ticker information.
    * @throws {Error} - Throws an error if the request fails.
@@ -36,6 +39,6 @@ export class Exchange {
    * console.log(btcTicker);
    */
   public static async getTickerByInstrument(instrumentName: string): Promise<ApiResponse<TickerData>> {
-    return await getTickerByInstrument(instrumentName);
+    return await getTickerByInstrument(Client.getApiKey(), instrumentName);
   }
 }

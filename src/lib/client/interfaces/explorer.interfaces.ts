@@ -79,6 +79,3 @@ export interface Abi {
 export interface TokenTotalSupply {
   totalSupply: string;
 }
-export interface TokenBalance {
-  tokenBalance: string;
-}

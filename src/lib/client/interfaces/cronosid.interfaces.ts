@@ -1,7 +1,7 @@
-export interface ResolveNameResponse {
+export interface ResolveName {
   resolvedAddress: string;
 }
 
-export interface LookupAddressResponse {
+export interface LookupAddress {
   resolvedName: string;
 }

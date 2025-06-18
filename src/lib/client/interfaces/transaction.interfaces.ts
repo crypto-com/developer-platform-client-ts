@@ -4,25 +4,9 @@ export interface MagicLinkData {
   magicLink: string;
 }
 
-export interface ListWalletsData {
-  wallets: Wallet[];
-  currentWallet: {
-    index: number;
-    address: string;
-  };
-}
-
-export interface GetBalanceData {
-  balances: Balance[];
-}
-
-export interface GetTransactionsByAddressData {
+export interface TransactionsByAddress {
   transactions: Transaction[];
   pagination?: Pagination;
-}
-
-export interface ConnectWalletData {
-  address: string;
 }
 
 export enum BlockTagString {
@@ -30,7 +14,7 @@ export enum BlockTagString {
   Earliest = 'earliest',
 }
 
-export interface GetTransactionByHashData {
+export interface TransactionByHash {
   blockNumber: number;
   from: string;
   to: string;
@@ -40,21 +24,10 @@ export interface GetTransactionByHashData {
   transactionIndex: number;
   gas: number;
 }
-export interface GetTransactionStatusData {
+
+export interface TransactionStatus {
   status: number | string;
   errDescription?: string;
-}
-
-interface Wallet {
-  walletNumber: number;
-  address: string;
-}
-
-interface Balance {
-  address: string;
-  balanceWei?: string;
-  balanceEth?: string;
-  error?: string;
 }
 
 export enum Unit {
@@ -80,4 +53,71 @@ export enum TransactionAction {
   Deposit = 'deposit',
   Approve = 'approve',
   Swap = 'swap',
+}
+
+export interface TransactionCount {
+  count: number;
+}
+
+export interface GasPrice {
+  gasPrice: string;
+}
+
+export interface FeeData {
+  feeData: {
+    _type: string;
+    gasPrice: string;
+    maxFeePerGas: string;
+    maxPriorityFeePerGas: string;
+  };
+}
+
+export interface GasLimit {
+  gasLimit: string;
+}
+
+export interface EstimateGasPayload {
+  from: string;
+  to?: string;
+  value?: string;
+  gasLimit?: string;
+  gasPrice?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
+  data?: string;
+  nonce?: number;
+  accessList?: Array<{
+    address: string;
+    storageKeys: string[];
+  }>;
+}
+
+export interface TransactionResponseData {
+  blockNumber: number | null;
+  blockHash: string | null;
+  index: number;
+  hash: string;
+  type: number;
+  to: string | null;
+  from: string;
+  nonce: number;
+  gasLimit: string;
+  gasPrice: string;
+  maxPriorityFeePerGas: string | null;
+  maxFeePerGas: string | null;
+  maxFeePerBlobGas: string | null;
+  data: string;
+  value: string;
+  chainId: string;
+  signature: {
+    r: string;
+    s: string;
+    v: number;
+    yParity?: number;
+  };
+  accessList: Array<{
+    address: string;
+    storageKeys: string[];
+  }> | null;
+  blobVersionedHashes: string[] | null;
 }

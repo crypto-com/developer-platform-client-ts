@@ -1,5 +1,27 @@
-import { EthProxyBlock } from './ethProxy.interfaces';
+export interface BlockNumber {
+  blockNumber: number;
+}
 
-export interface GetBlockByTag {
-  block: EthProxyBlock;
+export interface BlockData {
+  block: {
+    _type: string;
+    baseFeePerGas: string;
+    difficulty: string;
+    extraData: string;
+    gasLimit: string;
+    gasUsed: string;
+    blobGasUsed: string | null;
+    excessBlobGas: string | null;
+    hash: string;
+    miner: string;
+    prevRandao: string;
+    nonce: string;
+    number: number;
+    parentHash: string;
+    timestamp: number;
+    parentBeaconBlockRoot: string | null;
+    stateRoot: string;
+    receiptsRoot: string;
+    transactions: string[];
+  };
 }

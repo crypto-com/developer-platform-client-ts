@@ -5,15 +5,18 @@ import {
   swapToken,
   transferToken,
   wrapToken,
+  getERC721TokenBalance,
+  getTokenOwner,
+  getTokenUri,
+  getERC721Metadata,
+  getERC20Metadata,
 } from '../../integrations/token.api.js';
 import { Client } from './Client.js';
-import { TokenBalance } from './interfaces/explorer.interfaces.js';
-import { Balance } from './interfaces/token.interfaces.js';
+import { Balance, TokenMetadata } from './interfaces/token.interfaces.js';
 import { MagicLinkData } from './interfaces/transaction.interfaces.js';
 
 /**
- * Token class handles operations related to native tokens and ERC20 tokens,
- * such as fetching balances, transferring tokens, and token wrapping/swapping.
+ * Token class handles operations related to native tokens, ERC20 tokens, and NFTs.
  *
  * @class
  */
@@ -22,110 +25,190 @@ export class Token {
    * Fetches the native token balance of a specific wallet address.
    *
    * @async
-   * @param {string} address - The wallet address to check the native token balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
-   * @returns {Promise<ApiResponse<Balance>>} - A promise that resolves to the balance of the native token.
-   * @throws {Error} - Throws an error if the request fails.
+   * @param {string} address - The wallet address (or CronosId `.cro`) to check.
+   * @returns {Promise<ApiResponse<Balance>>} The native token balance.
+   * @throws {Error} If the request fails.
    *
    * @example
-   * const balance = await Token.getNativeTokenBalance('0x...');
+   * const balance = await Token.getNativeTokenBalance('0x123...');
    * console.log(balance);
    */
   public static async getNativeTokenBalance(address: string): Promise<ApiResponse<Balance>> {
-    const chainId = Client.getChainId();
-    const apiKey = Client.getApiKey();
-    return await getNativeTokenBalance(chainId, address, apiKey);
+    return await getNativeTokenBalance(Client.getApiKey(), address);
   }
 
   /**
-   * Fetches the ERC20 token balance of a specific wallet address for a given ERC20 contract.
+   * Fetches the ERC20 token balance of a wallet for a given ERC20 contract.
    *
    * @async
-   * @param {string} address - The wallet address to check the ERC20 token balance for (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
-   * @param {string} contractAddress - The contract address of the ERC20 token.
-   * @param {string} [blockHeight='latest'] - Optional. The block height to query, default is 'latest'.
-   * @returns {Promise<ApiResponse<TokenBalance>>} - A promise that resolves to the balance of the ERC20 token.
-   * @throws {Error} - Throws an error if the request fails.
+   * @param {string} address - The wallet address (or CronosId `.cro`) to check.
+   * @param {string} contractAddress - The ERC20 contract address.
+   * @param {string} [blockHeight='latest'] - Optional block height (default 'latest').
+   * @returns {Promise<ApiResponse<TokenBalance>>} The ERC20 token balance.
+   * @throws {Error} If the request fails.
    *
    * @example
-   * const erc20Balance = await Token.getERC20TokenBalance('0x...', '0x...');
-   * console.log(erc20Balance);
+   * const balance = await Token.getERC20TokenBalance('0x123...', '0xContract...');
+   * console.log(balance);
    */
   public static async getERC20TokenBalance(
     address: string,
     contractAddress: string,
     blockHeight: string = 'latest'
-  ): Promise<ApiResponse<TokenBalance>> {
-    const chainId = Client.getChainId();
-    const apiKey = Client.getApiKey();
-    return await getERC20TokenBalance(chainId, address, contractAddress, blockHeight, apiKey);
+  ): Promise<ApiResponse<Balance>> {
+    return await getERC20TokenBalance(Client.getApiKey(), address, contractAddress, blockHeight);
   }
 
   /**
-   * Sends a token transfer request to the blockchain network.
+   * Transfers native or ERC20 tokens.
    *
    * @async
-   * @param {object} payload - The transaction payload containing `to`, `amount`, and optionally `contractAddress`.
-   * @param {string} payload.to - The recipient address of the transfer (CronosIds with the `.cro` suffix are supported, e.g. `XXX.cro`)
-   * @param {number} payload.amount - The amount of tokens to transfer.
-   * @param {string} [payload.contractAddress] - Optional. The contract address of the ERC20 token (if transferring ERC20 tokens).
-   * @returns {Promise<ApiResponse<MagicLinkData>>} - A promise that resolves to the result of the transaction.
-   * @throws {Error} - Throws an error if the request fails.
+   * @param {object} payload - Transfer parameters.
+   * @param {string} payload.to - Recipient address.
+   * @param {number} payload.amount - Amount to transfer.
+   * @param {string} [payload.contractAddress] - ERC20 contract address (optional).
+   * @returns {Promise<ApiResponse<MagicLinkData>>} Transaction result.
+   * @throws {Error} If the request fails.
    *
    * @example
-   * const transferResult = await Token.transferToken({ to: '0x...', amount: 1 });
-   * console.log(transferResult);
+   * const result = await Token.transfer({ to: '0x456...', amount: 10 });
+   * console.log(result);
    */
   public static async transfer(payload: {
     to: string;
     amount: number;
     contractAddress?: string;
   }): Promise<ApiResponse<MagicLinkData>> {
-    const chainId = Client.getChainId();
-    const provider = Client.getProvider();
-    return await transferToken(chainId, payload, provider);
+    return await transferToken(Client.getApiKey(), payload, Client.getProvider());
   }
 
   /**
-   * Sends a token wrap request to the blockchain network, wrapping one token into another.
+   * Wrap tokens.
    *
    * @async
-   * @param {object} payload - The transaction payload containing `fromContractAddress`, `toContractAddress`, and `amount`.
-   * @param {number} payload.amount - The amount of tokens to wrap.
-   * @returns {Promise<ApiResponse<MagicLinkData>>} - A promise that resolves to the result of the wrap transaction.
-   * @throws {Error} - Throws an error if the request fails.
+   * @param {object} payload - Wrap parameters.
+   * @param {number} payload.amount - Amount to wrap.
+   * @returns {Promise<ApiResponse<MagicLinkData>>} Wrap transaction result.
+   * @throws {Error} If the request fails.
    *
    * @example
-   * const wrapResult = await Token.wrapToken({ fromContractAddress: '0x123...', toContractAddress: '0x456...', amount: 1 });
-   * console.log(wrapResult);
+   * const result = await Token.wrap({ amount: 5 });
+   * console.log(result);
    */
   public static async wrap(payload: { amount: number }): Promise<ApiResponse<MagicLinkData>> {
-    const chainId = Client.getChainId();
-    const provider = Client.getProvider();
-    return await wrapToken(chainId, payload, provider);
+    return await wrapToken(Client.getApiKey(), payload, Client.getProvider());
   }
 
   /**
-   * Sends a token swap request to the blockchain network, swapping one token for another.
+   * Swap tokens.
    *
    * @async
-   * @param {object} payload - The transaction payload containing `fromContractAddress`, `toContractAddress`, and `amount`.
-   * @param {string} payload.fromContractAddress - The contract address of the token being swapped.
-   * @param {string} payload.toContractAddress - The contract address of the token to receive.
-   * @param {number} payload.amount - The amount of tokens to swap.
-   * @returns {Promise<ApiResponse<MagicLinkData>>} - A promise that resolves to the result of the swap transaction.
-   * @throws {Error} - Throws an error if the request fails.
+   * @param {object} payload - Swap parameters.
+   * @param {string} payload.fromContractAddress - Token being swapped.
+   * @param {string} payload.toContractAddress - Token to receive.
+   * @param {number} payload.amount - Amount to swap.
+   * @returns {Promise<ApiResponse<MagicLinkData>>} Swap transaction result.
+   * @throws {Error} If the request fails.
    *
    * @example
-   * const swapResult = await Token.swapToken({ fromContractAddress: '0x...', toContractAddress: '0x...', amount: 1 });
-   * console.log(swapResult);
+   * const result = await Token.swap({
+   *   fromContractAddress: '0xFrom...',
+   *   toContractAddress: '0xTo...',
+   *   amount: 1
+   * });
+   * console.log(result);
    */
   public static async swap(payload: {
     fromContractAddress: string;
     toContractAddress: string;
     amount: number;
   }): Promise<ApiResponse<MagicLinkData>> {
-    const chainId = Client.getChainId();
-    const provider = Client.getProvider();
-    return await swapToken(chainId, payload, provider);
+    return await swapToken(Client.getApiKey(), payload, Client.getProvider());
+  }
+
+  /**
+   * Fetches the ERC721 token balance for a wallet and contract.
+   *
+   * @async
+   * @param {string} walletAddress - Wallet address to check.
+   * @param {string} contractAddress - ERC721 contract address.
+   * @returns {Promise<ApiResponse<Balance>>} The ERC721 token balance.
+   * @throws {Error} If the request fails.
+   *
+   * @example
+   * const balance = await Token.getERC721TokenBalance('0x123...', '0xContract...');
+   * console.log(balance);
+   */
+  public static async getERC721TokenBalance(
+    walletAddress: string,
+    contractAddress: string
+  ): Promise<ApiResponse<Balance>> {
+    return await getERC721TokenBalance(Client.getApiKey(), walletAddress, contractAddress);
+  }
+
+  /**
+   * Fetches the owner of a specific ERC721 token.
+   *
+   * @async
+   * @param {string} contractAddress - ERC721 contract address.
+   * @param {string} tokenId - Token ID.
+   * @returns {Promise<ApiResponse<string>>} Token owner information.
+   * @throws {Error} If the request fails.
+   *
+   * @example
+   * const owner = await Token.getTokenOwner('0xContract...', '123');
+   * console.log(owner);
+   */
+  public static async getTokenOwner(contractAddress: string, tokenId: string): Promise<ApiResponse<string>> {
+    return await getTokenOwner(Client.getApiKey(), contractAddress, tokenId);
+  }
+
+  /**
+   * Fetches the token URI of a specific ERC721 token.
+   *
+   * @async
+   * @param {string} contractAddress - ERC721 contract address.
+   * @param {string} tokenId - Token ID.
+   * @returns {Promise<ApiResponse<string>>} Token URI information.
+   * @throws {Error} If the request fails.
+   *
+   * @example
+   * const uri = await Token.getTokenURI('0xContract...', '123');
+   * console.log(uri);
+   */
+  public static async getTokenURI(contractAddress: string, tokenId: string): Promise<ApiResponse<string>> {
+    return await getTokenUri(Client.getApiKey(), contractAddress, tokenId);
+  }
+
+  /**
+   * Fetches metadata for a specific ERC721 contract.
+   *
+   * @async
+   * @param {string} contractAddress - ERC721 contract address.
+   * @returns {Promise<ApiResponse<TokenMetadata>>} ERC721 contract metadata.
+   * @throws {Error} If the request fails.
+   *
+   * @example
+   * const metadata = await Token.getERC721Metadata('0xContract...');
+   * console.log(metadata);
+   */
+  public static async getERC721Metadata(contractAddress: string): Promise<ApiResponse<TokenMetadata>> {
+    return await getERC721Metadata(Client.getApiKey(), contractAddress);
+  }
+
+  /**
+   * Fetches metadata for a specific ERC20 contract.
+   *
+   * @async
+   * @param {string} contractAddress - ERC20 contract address.
+   * @returns {Promise<ApiResponse<TokenMetadata>>} ERC20 contract metadata.
+   * @throws {Error} If the request fails.
+   *
+   * @example
+   * const metadata = await Token.getERC20Metadata('0xContract...');
+   * console.log(metadata);
+   */
+  public static async getERC20Metadata(contractAddress: string): Promise<ApiResponse<TokenMetadata>> {
+    return await getERC20Metadata(Client.getApiKey(), contractAddress);
   }
 }
