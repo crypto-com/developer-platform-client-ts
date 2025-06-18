@@ -12,7 +12,6 @@ import {
   getERC20Metadata,
 } from '../../integrations/token.api.js';
 import { Client } from './Client.js';
-import { TokenBalance } from './interfaces/explorer.interfaces.js';
 import { Balance, TokenMetadata } from './interfaces/token.interfaces.js';
 import { MagicLinkData } from './interfaces/transaction.interfaces.js';
 
@@ -56,7 +55,7 @@ export class Token {
     address: string,
     contractAddress: string,
     blockHeight: string = 'latest'
-  ): Promise<ApiResponse<TokenBalance>> {
+  ): Promise<ApiResponse<Balance>> {
     return await getERC20TokenBalance(Client.getApiKey(), address, contractAddress, blockHeight);
   }
 

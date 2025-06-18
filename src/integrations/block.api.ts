@@ -1,4 +1,4 @@
-import { Block, BlockNumber } from '../lib/client/interfaces/block.interfaces.js';
+import { BlockData, BlockNumber } from '../lib/client/interfaces/block.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
 
@@ -58,7 +58,7 @@ export const getBlockByTag = async (
   apiKey: string,
   blockTag: string,
   txDetail: string = 'false'
-): Promise<ApiResponse<Block>> => {
+): Promise<ApiResponse<BlockData>> => {
   const url = `${BASE_URL}/api/v1/cdc-developer-platform/block/block-tag?blockTag=${blockTag}&txDetail=${txDetail}`;
 
   try {
