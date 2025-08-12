@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../integrations/api.interfaces.js';
-import { getContractABI, getContractCode } from '../../integrations/contract.api.js';
+import { getContractCode } from '../../integrations/contract.api.js';
 import { Client } from './Client.js';
-import { ContractAbi, ContractCode } from './interfaces/contract.interfaces.js';
+import { ContractCode } from './interfaces/contract.interfaces.js';
 
 /**
  * Contract class handles interactions related to smart contracts, such as fetching contract ABI and bytecode.
@@ -9,23 +9,6 @@ import { ContractAbi, ContractCode } from './interfaces/contract.interfaces.js';
  * @class
  */
 export class Contract {
-  /**
-   * Fetches the ABI (Application Binary Interface) of a smart contract.
-   *
-   * @async
-   * @param {string} contractAddress - The smart contract address.
-   * @param {string} explorerKey - The API key for the blockchain explorer.
-   * @returns {Promise<ApiResponse<ContractAbi>>} - A promise that resolves to the ABI of the contract.
-   * @throws {Error} If the ABI retrieval fails.
-   *
-   * @example
-   * const abi = await Contract.getContractABI('0x...', 'explorerKey');
-   * console.log(abi);
-   */
-  public static async getContractABI(contractAddress: string, explorerKey: string): Promise<ApiResponse<ContractAbi>> {
-    return await getContractABI(Client.getApiKey(), contractAddress, explorerKey);
-  }
-
   /**
    * Fetches the bytecode of a smart contract.
    *

@@ -1,50 +1,6 @@
-import { ContractAbi, ContractCode } from '../lib/client/interfaces/contract.interfaces.js';
+import { ContractCode } from '../lib/client/interfaces/contract.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-
-/**
- * Fetches the ABI (Application Binary Interface) of a specific contract by its address on a particular blockchain network.
- *
- * @async
- * @param {string} apiKey - The API key used for authentication with the server.
- * @param {string} contractAddress - The contract address on the blockchain for which the ABI needs to be fetched.
- * @param {string} explorerKey - The API key used for querying the blockchain explorer.
- * @returns {Promise<ApiResponse<ContractAbi>>} - A promise that resolves to the ABI of the contract or throws an error if the request fails.
- * @throws {Error} Will throw an error if the fetch request fails or the server responds with an error message.
- *
- * @example
- * const abi = await getContractABI(apiKey, '0x...', explorerKey);
- * console.log(abi);
- */
-export const getContractABI = async (
-  apiKey: string,
-  contractAddress: string,
-  explorerKey: string
-): Promise<ApiResponse<ContractAbi>> => {
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/contract/contract-abi?contractAddress=${contractAddress}&explorerKey=${explorerKey}`;
-
-  try {
-    const response = await fetch(url, {
-      method: Method.GET,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-      },
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.json();
-      const serverErrorMessage = errorBody.error || `HTTP error! status: ${response.status}`;
-      throw new Error(serverErrorMessage);
-    }
-
-    return await response.json();
-  } catch (e) {
-    const error = e as Error;
-    console.error(`[contractApi/getContractABI] - ${error.message}`);
-    throw new Error(`Failed to fetch contract ABI: ${error.message}`);
-  }
-};
 
 /**
  * Fetches the bytecode of a specific contract by its address on a particular blockchain network.
