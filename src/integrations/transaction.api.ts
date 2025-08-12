@@ -1,76 +1,14 @@
 import {
-  TransactionByHash,
-  TransactionsByAddress,
-  TransactionStatus,
-  TransactionCount,
-  GasPrice,
-  FeeData,
   EstimateGasPayload,
+  FeeData,
   GasLimit,
+  GasPrice,
+  TransactionByHash,
+  TransactionCount,
+  TransactionStatus,
 } from '../lib/client/interfaces/transaction.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
-
-/**
- * Fetches transactions for a specific wallet address.
- *
- * @async
- * @param {string} apiKey - The API key used for authentication with the server.
- * @param {string} address - Wallet address (CronosIds supported, e.g. `xyz.cro`).
- * @param {string} explorerKey - Blockchain explorer API key.
- * @param {string} session - Pagination session.
- * @param {string} limit - Number of transactions to fetch.
- * @param {number} [startBlock] - Start block number.
- * @param {number} [endBlock] - End block number.
- * @returns {Promise<ApiResponse<TransactionsByAddress>>} - A promise that resolves to transactions.
- * @throws {Error} Will throw if request fails.
- *
- * @example
- * const res = await getTransactionsByAddress(apiKey, '0x...', 'explorerKey');
- * console.log(res);
- */
-export const getTransactionsByAddress = async (
-  apiKey: string,
-  address: string,
-  explorerKey: string,
-  session: string,
-  limit: string,
-  startBlock?: number,
-  endBlock?: number
-): Promise<ApiResponse<TransactionsByAddress>> => {
-  const params = new URLSearchParams({
-    address,
-    explorerKey,
-    session,
-    limit,
-  });
-
-  if (startBlock !== undefined) params.append('startBlock', startBlock.toString());
-  if (endBlock !== undefined) params.append('endBlock', endBlock.toString());
-
-  const url = `${BASE_URL}/api/v1/cdc-developer-platform/transaction/address?${params.toString()}`;
-
-  try {
-    const response = await fetch(url, {
-      method: Method.GET,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-      },
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.json();
-      throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (e) {
-    const error = e as Error;
-    console.error(`[transactionApi/getTransactionsByAddress] - ${error.message}`);
-    throw new Error(`Failed to fetch transactions: ${error.message}`);
-  }
-};
 
 /**
  * Fetches a transaction by its hash.

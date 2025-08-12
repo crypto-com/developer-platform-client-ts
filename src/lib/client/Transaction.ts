@@ -1,12 +1,11 @@
 import { ApiResponse } from '../../integrations/api.interfaces.js';
 import {
-  getTransactionByHash,
-  getTransactionsByAddress,
-  getTransactionStatus,
-  getTransactionCount,
-  getGasPrice,
-  getFeeData,
   estimateGas,
+  getFeeData,
+  getGasPrice,
+  getTransactionByHash,
+  getTransactionCount,
+  getTransactionStatus,
 } from '../../integrations/transaction.api.js';
 import { Client } from './Client.js';
 import {
@@ -16,7 +15,6 @@ import {
   GasPrice,
   TransactionByHash,
   TransactionCount,
-  TransactionsByAddress,
   TransactionStatus,
 } from './interfaces/transaction.interfaces.js';
 
@@ -26,40 +24,6 @@ import {
  * @class
  */
 export class Transaction {
-  /**
-   * Fetches transactions for a specific wallet address.
-   *
-   * @async
-   * @param {string} address - Wallet address (or CronosId `.cro`).
-   * @param {string} explorerKey - Blockchain explorer API key.
-   * @param {string} [session] - Pagination session.
-   * @param {string} [limit='20'] - Result limit.
-   * @param {number} [startBlock] - Start block (optional).
-   * @param {number} [endBlock] - End block (optional).
-   * @returns {Promise<ApiResponse<TransactionsByAddress>>}
-   * @example
-   * const transactions = await Transaction.getTransactionsByAddress('0x...', 'explorerKey');
-   * console.log(transactions);
-   */
-  public static async getTransactionsByAddress(
-    address: string,
-    explorerKey: string,
-    session: string = '',
-    limit: string = '20',
-    startBlock?: number,
-    endBlock?: number
-  ): Promise<ApiResponse<TransactionsByAddress>> {
-    return await getTransactionsByAddress(
-      Client.getApiKey(),
-      address,
-      explorerKey,
-      session,
-      limit,
-      startBlock,
-      endBlock
-    );
-  }
-
   /**
    * Fetches a transaction by hash.
    *
