@@ -4,6 +4,7 @@ import { Contract } from './lib/client/Contract.js';
 import { CronosId } from './lib/client/Cronosid.js';
 import { Defi } from './lib/client/Defi.js';
 import { Exchange } from './lib/client/Exchange.js';
+import { Network } from './lib/client/Network.js';
 import { CronosEvm, CronosZkEvm } from './lib/client/interfaces/chain.interfaces.js';
 import { DefiProtocol } from './lib/client/interfaces/defi.interfaces.js';
 import { Token } from './lib/client/Token.js';
@@ -78,6 +79,12 @@ import { Wallet } from './lib/client/Wallet.js';
  * @module CronosId
  */
 
+/**
+ * Network class for fetching blockchain network metadata.
+ *
+ * @module Network
+ */
+
 export {
   Block,
   Client,
@@ -88,6 +95,7 @@ export {
   Defi,
   DefiProtocol,
   Exchange,
+  Network,
   Token,
   Transaction,
   Wallet,
