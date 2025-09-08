@@ -3,6 +3,7 @@ import { Client } from './lib/client/Client.js';
 import { Contract } from './lib/client/Contract.js';
 import { CronosId } from './lib/client/Cronosid.js';
 import { Defi } from './lib/client/Defi.js';
+import { Event } from './lib/client/Event.js';
 import { Exchange } from './lib/client/Exchange.js';
 import { Network } from './lib/client/Network.js';
 import { CronosEvm, CronosZkEvm } from './lib/client/interfaces/chain.interfaces.js';
@@ -85,6 +86,12 @@ import { Wallet } from './lib/client/Wallet.js';
  * @module Network
  */
 
+/**
+ * Event class for fetching event logs.
+ *
+ * @module Event
+ */
+
 export {
   Block,
   Client,
@@ -94,6 +101,7 @@ export {
   CronosZkEvm,
   Defi,
   DefiProtocol,
+  Event,
   Exchange,
   Network,
   Token,

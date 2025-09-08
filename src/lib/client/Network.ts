@@ -1,7 +1,7 @@
 import { getChainId, getClientVersion, getNetworkInfo } from '../../integrations/network.api.js';
 import { ApiResponse } from '../../integrations/api.interfaces.js';
 import { Client } from './Client.js';
-import { ChainId, ClientVersion, Info } from './interfaces/network.interface.js';
+import { ChainId, ClientVersion, Info } from './interfaces/network.interfaces.js';
 
 /**
  * Network class handles operations related to network data retrieval.

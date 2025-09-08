@@ -1,4 +1,4 @@
-import { ClientVersion, ChainId, Info } from '@/lib/client/interfaces/network.interface.js';
+import { ClientVersion, ChainId, Info } from '../lib/client/interfaces/network.interfaces.js';
 import { BASE_URL } from '../lib/constants/global.constants.js';
 import { ApiResponse, Method } from './api.interfaces.js';
 
