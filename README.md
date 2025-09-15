@@ -109,11 +109,6 @@ console.log(metadata20);
 ## Transaction
 
 ```ts
-const txs = await Transaction.getTransactionsByAddress('0xAddress', 'explorerKey');
-console.log(txs);
-```
-
-```ts
 const tx = await Transaction.getTransactionByHash('0xHash');
 console.log(tx);
 ```
@@ -149,11 +144,6 @@ console.log(estimate);
 ```
 
 ## Contract
-
-```ts
-const abi = await Contract.getContractABI('0xContract', 'explorerKey');
-console.log(abi);
-```
 
 ```ts
 const bytecode = await Contract.getContractCode('0xContract');
@@ -242,7 +232,6 @@ console.log(ticker);
 
 ### Transaction Methods
 
-- `Transaction.getTransactionsByAddress(address, explorerKey, session?, limit?, startBlock?, endBlock?)`: Returns transaction list.
 - `Transaction.getTransactionByHash(txHash)`: Returns a transaction by hash.
 - `Transaction.getTransactionStatus(txHash)`: Returns transaction status.
 - `Transaction.getTransactionCount(address)`: Returns the nonce/transaction count for a wallet.
@@ -252,7 +241,6 @@ console.log(ticker);
 
 ### Contract Methods
 
-- `Contract.getContractABI(contractAddress, explorerKey)`: Returns the ABI of a smart contract.
 - `Contract.getContractCode(contractAddress)`: Returns bytecode of a smart contract.
 
 ### Block Methods
